@@ -10,7 +10,7 @@ work on Heroku.
 A [finished example](https://lemurian.herokuapp.com) that demonstrates some basic functionality.
 
 ## Step 1: Setup and deploy
-- Git clone the existing template repository.
+- ~~Git clone the existing template repository.~~
 - `Procfile`, `requirements.txt`, `conda-requirements.txt`, and `runtime.txt`
   contain some default settings.
 - There is some boilerplate HTML in `templates/`
