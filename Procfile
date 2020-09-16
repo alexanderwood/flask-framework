@@ -1,1 +1,2 @@
-web: bokeh serve --port=$PORT --allow-websocket-origin=alexanderwood-demo.herokuapp.com --address=0.0.0.0 --use-xheaders app
+web: bokeh serve --port=$PORT --host=alexanderwood-demo.herokuapp.com --host=* \
+     --address=0.0.0.0 --use-xheaders app.py
