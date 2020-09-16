@@ -45,7 +45,7 @@ def query_alpha_vantage(ticker_symbol, date_slice):
 def plot_stock(ticker_symbol, month, year):
     date_slice = 'year' + year + 'month' + month
     df = query_alpha_vantage(ticker_symbol, date_slice)
-
+    return str(df.head())
     f = figure(x_axis_type='datetime')
     
     source = ColumnDataSource(df)
@@ -82,7 +82,7 @@ def index_post():
     ticker_symbol = request.form['stock']
 
     f = plot_stock(ticker_symbol, month, year)
-    
+    return f
     #script, div = components(f)
     h = file_html(f,CDN,"my plot")
     return h
