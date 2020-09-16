@@ -17,7 +17,7 @@ from bokeh.resources import CDN
 from bokeh.embed import file_html
 
 #from config import *  # DEVELOPMENT ONLY
-#ALPHA_VANTAGE_API_KEY = os.environ.get('ALPHA_VANTAGE_API_KEY')
+ALPHA_VANTAGE_API_KEY = os.environ.get('ALPHA_VANTAGE_API_KEY')
 
 app = Flask(__name__)
 
