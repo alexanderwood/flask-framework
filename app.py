@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# @author: Alexander Wood
+
 import requests
 import os
 from io import StringIO
@@ -18,11 +21,11 @@ from bokeh.embed import file_html
 
 #from config import *  # DEVELOPMENT ONLY
 ALPHA_VANTAGE_API_KEY = os.environ.get('ALPHA_VANTAGE_API_KEY')
-
 app = Flask(__name__)
 
 
 def query_alpha_vantage(ticker_symbol, date_slice):
+    '''Query alpha vantage for one month of stock data.'''
     json_query = ('https://www.alphavantage.co/query?' +
         'function=TIME_SERIES_INTRADAY_EXTENDED' +
         '&symbol=' + ticker_symbol +
@@ -43,37 +46,32 @@ def query_alpha_vantage(ticker_symbol, date_slice):
     
 
 def plot_stock(ticker_symbol, month, year):
+    '''Plot one month of stock closing data'''
     date_slice = 'year' + year + 'month' + month
     df = query_alpha_vantage(ticker_symbol, date_slice)
 
-    f = figure(x_axis_type='datetime')
+    strout = ticker_symbol + ' stock closing prices'
+    f = figure(x_axis_type='datetime',
+               aspect_ratio = 2,
+               title = strout)
     
     source = ColumnDataSource(df)
     
-    f.line('time', 'close', source=source)
+    f.line('time', 'close', source=source, color='navy')
+    
     f.ygrid.grid_line_color = None
+    f.ygrid.band_fill_color = 'navy'
+    f.ygrid.band_fill_alpha = 0.05
+    f.yaxis.axis_label = 'Price'
+    f.xaxis.axis_label = 'Date'
     
-    #f.title('Closing data for the month of x')
-    
-    return(f)
-
-
-@app.route('/submit', methods=['POST'])
-def submit():
-    print("bar")
-    return render_template('submit.html')
-#  return render_template('about.html')
-  
-  
-@app.route('/about', methods=['POST'])
-def about():
-    print('abc')
-    return render_template('about.html')
+    return f
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
+    
     
 @app.route('/', methods=['POST'])
 def index_post():
@@ -83,10 +81,8 @@ def index_post():
 
     f = plot_stock(ticker_symbol, month, year)
 
-    #script, div = components(f)
     h = file_html(f,CDN,"my plot")
     return h
-    return render_template('index.html', script=script, div=div)
 
 
 if __name__ == '__main__':
