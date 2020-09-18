@@ -13,11 +13,8 @@ from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 
 from bokeh.plotting import figure
-from bokeh.io import show
 from bokeh.models import ColumnDataSource
 from bokeh.embed import components
-from bokeh.resources import CDN
-from bokeh.embed import file_html
 
 #from config import *  # DEVELOPMENT ONLY
 ALPHA_VANTAGE_API_KEY = os.environ.get('ALPHA_VANTAGE_API_KEY')
@@ -81,9 +78,19 @@ def index_post():
 
     f = plot_stock(ticker_symbol, month, year)
 
-    h = file_html(f,CDN,"my plot")
     return h
 
+@app.route('/response', methods=['POST'])
+def response():
+    year = request.form['year']
+    month = request.form['month']
+    ticker_symbol = request.form['stock']
+
+    f = plot_stock(ticker_symbol, month, year)
+    
+    script, div = components(f)
+    return render_template('response.html', div=div, script=script)
+    
 
 if __name__ == '__main__':
     app.run(port=5000)
